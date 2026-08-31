@@ -73,7 +73,7 @@
           </aside>
 
           <div class="vacancy-form-wrap">
-            <form class="vacancy-form">
+            <form class="vacancy-form" action="./submit.php" method="post" enctype="multipart/form-data">
               <div class="field-grid">
                 <label>
                   Full name
@@ -100,11 +100,11 @@
                 Applying for position
                 <select name="position" required>
                   <option value="">Select one</option>
-                  <option>Education Programme Coordinator</option>
-                  <option>Student Outreach Officer</option>
-                  <option>Community Engagement Associate</option>
-                  <option>Administrative Support</option>
-                  <option>Research &amp; Documentation</option>
+                  <option value="Education Programme Coordinator">Education Programme Coordinator</option>
+                  <option value="Student Outreach Officer">Student Outreach Officer</option>
+                  <option value="Community Engagement Associate">Community Engagement Associate</option>
+                  <option value="Administrative Support">Administrative Support</option>
+                  <option value="Research &amp; Documentation">Research &amp; Documentation</option>
                 </select>
               </label>
 
@@ -131,7 +131,7 @@
 
               <label class="file-field">
                 Upload resume
-                <input type="file" name="resume" accept=".pdf,.doc,.docx">
+                <input type="file" name="resume" accept=".pdf,.doc,.docx" required>
               </label>
 
               <button type="submit" class="button">Submit application</button>
