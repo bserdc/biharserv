@@ -2,24 +2,23 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/db.php';
+$settings = [
+    'site_title' => 'Bihar State Educational Development & Research Council',
+    'home_title' => 'Har talent ko milni chahiye opportunity to shine.',
+    'home_subtitle' => 'Hum exams aur sahi pehchaan ke zariye Bihar ke honhaar students ko talaashte hain, aur unhe aage badhne ke liye poora educational support dete hain.',
+    'hero_tagline' => 'Building futures through education',
+    'gallery_heading' => 'Celebrating talent, effort and progress.',
+    'gallery_intro' => 'A glimpse into our recognition programmes, student achievements and community learning experiences across Bihar.'
+];
 
-try {
-    $pdo = getPdo();
-    ensureSiteSchema($pdo);
-    $settings = getSiteSettings($pdo);
-    $galleryItems = getGalleryItems($pdo, 6);
-} catch (Throwable $e) {
-    $settings = SITE_DEFAULTS;
-    $galleryItems = [
-        ['title' => 'Recognition Day', 'subtitle' => 'Students honoured for dedication and excellence', 'image_url' => './assets/founder award  (1).jpeg', 'featured' => 1],
-        ['title' => 'Talent Hunt', 'subtitle' => 'Encouraging brilliant minds', 'image_url' => './assets/founder award  (2).jpeg', 'featured' => 0],
-        ['title' => 'Learning Support', 'subtitle' => 'Helping young learners move forward', 'image_url' => './assets/founder award  (3).jpeg', 'featured' => 0],
-        ['title' => 'Community Celebration', 'subtitle' => 'Shared success with families and schools', 'image_url' => './assets/founder award  (4).jpeg', 'featured' => 1],
-        ['title' => 'Education for All', 'subtitle' => 'Building opportunity through guidance', 'image_url' => './assets/founder award  (1).jpeg', 'featured' => 0],
-        ['title' => 'Growth Journey', 'subtitle' => 'Each achievement sparks a bigger dream', 'image_url' => './assets/founder award  (2).jpeg', 'featured' => 0],
-    ];
-}
+$galleryItems = [
+    ['title' => 'Recognition Day', 'subtitle' => 'Students honoured for dedication and excellence', 'image_url' => './assets/founder award  (1).jpeg', 'featured' => 1],
+    ['title' => 'Talent Hunt', 'subtitle' => 'Encouraging brilliant minds', 'image_url' => './assets/founder award  (2).jpeg', 'featured' => 0],
+    ['title' => 'Learning Support', 'subtitle' => 'Helping young learners move forward', 'image_url' => './assets/founder award  (3).jpeg', 'featured' => 0],
+    ['title' => 'Community Celebration', 'subtitle' => 'Shared success with families and schools', 'image_url' => './assets/founder award  (4).jpeg', 'featured' => 1],
+    ['title' => 'Education for All', 'subtitle' => 'Building opportunity through guidance', 'image_url' => './assets/founder award  (1).jpeg', 'featured' => 0],
+    ['title' => 'Growth Journey', 'subtitle' => 'Each achievement sparks a bigger dream', 'image_url' => './assets/founder award  (2).jpeg', 'featured' => 0],
+];
 
 $pageTitle = $settings['site_title'];
 $currentPage = 'index.php';

@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('[data-current-year]').forEach(node => node.textContent = new Date().getFullYear());
 
-  const PHP_ENDPOINT = './submit.php';
   const form = document.querySelector('.vacancy-form');
   const acknowledgementBox = document.querySelector('.acknowledgement-box');
   const downloadButton = document.getElementById('downloadAck');
@@ -131,34 +130,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // --- Premium PHP/MySQL path: send raw FormData (fields + resume upload) ---
-      try {
-        const response = await fetch(PHP_ENDPOINT, {
-          method: 'POST',
-          body: formData
-        });
+      // Local-only demo mode: no server or backend call is used.
+      const receipt = `BSEDRC-LOCAL-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9000) + 1000)}`;
+      const confirmationMessage = `Your application has been recorded locally. Receipt number: ${receipt}.`;
 
-        if (!response.ok) {
-          throw new Error(`Submission failed with status ${response.status}`);
-        }
-
-        const data = await response.json().catch(() => null);
-
-        if (!data) {
-          showAcknowledgement(fullName, position, email, 'The server returned an unexpected response. Please try again.');
-          return;
-        }
-
-        if (data.success) {
-          showAcknowledgement(fullName, position, email, data.receipt ? `${data.message} Receipt number: ${data.receipt}.` : data.message);
-        } else {
-          showAcknowledgement(fullName, position, email, data.message || 'Submission failed. Please check your connection and try again.');
-        }
-      } catch (error) {
-        console.warn('PHP backend submit failed.', error);
-        showAcknowledgement(fullName, position, email, 'Submission failed. Please check your connection and try again.');
-      }
-
+      showAcknowledgement(fullName, position, email, confirmationMessage);
       form.reset();
     });
   }
