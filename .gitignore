@@ -5,8 +5,15 @@ student-zone/dist/
 vendor/
 
 # Build / generated output
+dist/
 /dist/
+build/
 /build/
+.vite/
+coverage/
+logs/
+tmp/
+temp/
 *.log
 npm-debug.log*
 yarn-debug.log*

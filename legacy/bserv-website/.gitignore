@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+student-zone/node_modules/
+student-zone/dist/
+vendor/
+
+# Build / generated output
+/dist/
+/build/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+__pycache__/
+
+# Uploaded / generated content
+uploads/
+storage/
+tmp/
+
+# Local database / secrets
+*.sqlite
+*.sqlite3
+*.db

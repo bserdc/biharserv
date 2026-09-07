@@ -1,1 +1,0 @@
-Only For Foundation

@@ -1,0 +1,6 @@
+{
+  "name": "Bihar State Educational Development and Research Council",
+  "description": "Official Examination, Registration, Institutional U-DISE Directory & Central Administration Portal for Bihar State Educational Development and Research Council (BSEDRC).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

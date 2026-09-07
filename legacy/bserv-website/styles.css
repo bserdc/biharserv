@@ -30,21 +30,6 @@ img {
   max-width: 100%;
 }
 
-html,
-body {
-  width: 100%;
-}
-
-h1,
-h2,
-h3,
-p,
-a,
-span,
-button {
-  overflow-wrap: anywhere;
-}
-
 a {
   color: inherit;
   text-decoration: none;
@@ -1396,7 +1381,7 @@ button.button {
   }
 
   .header-wrap {
-    grid-template-columns: 64px minmax(0, 1fr) 44px;
+    grid-template-columns: 68px minmax(0, 1fr) auto;
     gap: 10px;
     min-height: 86px;
     height: auto;
@@ -1431,7 +1416,7 @@ button.button {
   }
 
   .socials {
-    display: none;
+    gap: 6px;
   }
 
   .social-link {
@@ -1452,6 +1437,9 @@ button.button {
 
   .main-nav {
     display: flex;
+    top: 88px;
+    left: 0;
+    right: 0;
     background: #8b2d2d;
     flex-direction: column;
     align-items: stretch;
@@ -1495,7 +1483,6 @@ button.button {
 
   .hero {
     grid-template-columns: 1fr;
-    min-height: auto;
   }
 
 
@@ -1553,52 +1540,6 @@ button.button {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .recognition {
-    gap: 36px;
-  }
-
-  .gallery-layout {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .gallery-item.featured,
-  .gallery-item.wide {
-    grid-column: span 2;
-  }
-
-  .student-zone-hero-inner {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .student-zone-hero-actions {
-    justify-content: flex-start;
-    width: 100%;
-  }
-
-  .stats-grid,
-  .district-grid,
-  .student-notice-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .dashboard-grid,
-  .bottom-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .panel-topbar,
-  .notice-item,
-  .program-item,
-  .student-row {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .student-status {
-    text-align: left;
-  }
-
 
   .section-heading {
     align-items: start;
@@ -1627,11 +1568,11 @@ button.button {
 @media (max-width: 520px) {
   .section-shell,
   .header-wrap {
-    width: min(100% - 24px, var(--max));
+    width: min(100% - 32px, var(--max));
   }
 
   .header-wrap {
-    grid-template-columns: 50px minmax(0, 1fr) 40px;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
     gap: 8px;
   }
 
@@ -1641,12 +1582,16 @@ button.button {
   }
 
   .header-hindi {
-    font-size: clamp(1rem, 5vw, 1.35rem);
+    font-size: clamp(1.1rem, 5.2vw, 1.5rem);
   }
 
   .header-english {
     font-size: 0.48rem;
     letter-spacing: 0.04em;
+  }
+
+  .socials {
+    display: none;
   }
 
   .report-bar {
@@ -1659,8 +1604,7 @@ button.button {
   }
 
   .hero h1 {
-    font-size: clamp(2rem, 9vw, 2.85rem);
-    line-height: 1.08;
+    font-size: clamp(2.1rem, 10vw, 3rem);
   }
 
   .hero-actions {
@@ -1671,40 +1615,6 @@ button.button {
 
   .work-grid {
     grid-template-columns: 1fr;
-  }
-
-  .notice-embed {
-    width: calc(100% - 16px);
-    margin: 28px auto;
-    border-radius: 14px;
-  }
-
-  .notice-embed-frame {
-    height: 1700px;
-  }
-
-  .intro,
-  .recognition,
-  .contact-grid {
-    gap: 32px;
-    padding: 54px 0;
-  }
-
-  .intro h2,
-  .recognition h2,
-  .join-section h2 {
-    font-size: clamp(2rem, 10vw, 2.75rem);
-    line-height: 1.05;
-    letter-spacing: 0;
-  }
-
-  .image-frame:before {
-    display: none;
-  }
-
-  .image-frame img,
-  .recognition figure > img {
-    height: 300px;
   }
 
   .work-card img {
@@ -1725,14 +1635,16 @@ button.button {
     grid-column: auto;
   }
 
+  .recognition figure > img {
+    height: 330px;
+  }
+
   .recognition figcaption {
-    position: static;
     padding: 15px;
-    flex-wrap: wrap;
   }
 
   .contact-card {
-    padding: 24px 20px;
+    padding: 30px;
   }
 
   .footer-grid {
@@ -1741,46 +1653,5 @@ button.button {
 
   .footer-grid > div:first-child {
     grid-column: auto;
-  }
-
-  .gallery-layout,
-  .stats-grid,
-  .district-grid,
-  .student-notice-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .gallery-item.featured,
-  .gallery-item.wide {
-    grid-column: auto;
-  }
-
-  .student-zone-hero {
-    padding: 28px 0 34px;
-  }
-
-  .student-zone-hero h1 {
-    font-size: clamp(2rem, 10vw, 2.7rem);
-  }
-
-  .student-zone-hero-actions .button,
-  .hero-actions .button,
-  .button {
-    width: 100%;
-    min-height: 44px;
-  }
-
-  .panel-box {
-    border-radius: 18px;
-    padding: 18px;
-  }
-
-  .vacancy-shell {
-    padding: 54px 0 70px;
-  }
-
-  .vacancy-info,
-  .vacancy-form-wrap {
-    padding: 24px 18px;
   }
 }
