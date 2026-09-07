@@ -45,7 +45,8 @@ export const api = {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
-    return res.json();
+    const payload = await res.json();
+    return res.ok ? payload : { success: false };
   },
 
   async adminLogout(_token?: string): Promise<{ success: boolean }> {
@@ -280,6 +281,15 @@ export const api = {
   async createNotice(data: Partial<NoticeCircular>): Promise<{ success: boolean; message: string; notice: NoticeCircular }> {
     const res = await fetch('/api/notices', {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  },
+
+  async updateNotice(id: string, data: Partial<NoticeCircular>): Promise<{ success: boolean; message: string; notice: NoticeCircular }> {
+    const res = await fetch(`/api/notices/${id}`, {
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });

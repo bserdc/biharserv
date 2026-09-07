@@ -201,6 +201,12 @@ export interface NoticeCircular {
   content_en: string;
   pdf_filename?: string;
   signed_by: string;
+  is_published?: boolean;
+  published_at?: string;
+  priority?: 'normal' | 'important' | 'urgent';
+  expires_at?: string | null;
+  external_link?: string | null;
+  attachment_url?: string | null;
 }
 
 export interface MeritTopper {

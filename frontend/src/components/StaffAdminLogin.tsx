@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, Users, LogIn, UserPlus } from 'lucide-react';
 import { supabase } from '../services/supabase';
 import { api } from '../services/api';
+const localFrontendRedirect = () => `${window.location.origin}/`;
 
-export function StaffAdminLogin({ onClose }: { onClose: () => void; onAdminLoginSuccess?: (user: any) => void }) {
+export function StaffAdminLogin({ onClose, onAdminLoginSuccess }: { onClose: () => void; onAdminLoginSuccess?: () => void }) {
   const [role, setRole] = useState<'principal' | 'examiner'>('principal');
   const [register, setRegister] = useState(false);
   const [email, setEmail] = useState('');
@@ -37,6 +38,17 @@ export function StaffAdminLogin({ onClose }: { onClose: () => void; onAdminLogin
       return setError(verified.error || 'Your account is pending approval or disabled.');
     }
     setMessage('Login successful.');
+    onAdminLoginSuccess?.();
+  };
+  const requestPasswordReset = async () => {
+    setError('');
+    setMessage('');
+    if (!email.trim()) return setError('Enter your account email first.');
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: localFrontendRedirect(),
+    });
+    if (resetError) return setError(resetError.message);
+    setMessage('Password reset email sent. Open the new link to set a password.');
   };
 
   return (
@@ -63,7 +75,7 @@ export function StaffAdminLogin({ onClose }: { onClose: () => void; onAdminLogin
             <div className="relative"><Mail className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" /><input required type="email" placeholder="Enter your email" value={email} onChange={e => setEmail(e.target.value)} className="w-full rounded-lg border p-3 pl-10 text-sm" /></div>
             <div className="relative"><Lock className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" /><input required type={showPassword ? 'text' : 'password'} placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} className="w-full rounded-lg border p-3 pl-10 pr-10 text-sm" /><button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3.5 text-slate-400">{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button></div>
             {register && <><input required type="password" placeholder="Confirm Password" value={confirm} onChange={e => setConfirm(e.target.value)} className="w-full rounded-lg border p-3 text-sm" />{role === 'principal' && <><input required placeholder="School Name" value={school} onChange={e => setSchool(e.target.value)} className="w-full rounded-lg border p-3 text-sm" /><input required placeholder="UDISE Code" value={udise} onChange={e => setUdise(e.target.value)} className="w-full rounded-lg border p-3 text-sm" /></>}</>}
-            <div className="flex justify-between text-xs"><label><input type="checkbox" /> Remember me</label><button type="button" className="text-blue-700">Forgot Password?</button></div>
+            <div className="flex justify-between text-xs"><label><input type="checkbox" /> Remember me</label><button type="button" onClick={requestPasswordReset} className="text-blue-700">Forgot Password?</button></div>
             <button className="flex w-full justify-center gap-2 rounded-lg bg-blue-700 p-3 text-sm font-bold text-white"><LogIn size={17} /> {register ? 'SUBMIT REGISTRATION' : 'LOGIN'}</button>
             {!register && <button type="button" onClick={() => setRegister(true)} className="flex w-full justify-center gap-2 rounded-lg border p-3 text-sm font-bold text-blue-700"><UserPlus size={17} /> REGISTER</button>}
             {!register && <p className="text-center text-xs text-slate-500">New here? Register to create your account.</p>}
@@ -73,6 +85,44 @@ export function StaffAdminLogin({ onClose }: { onClose: () => void; onAdminLogin
         <footer className="border-t p-4 text-center text-xs text-slate-500">Secure &amp; Encrypted · Authorized Access Only · 24/7 Support</footer>
         <button onClick={onClose} className="absolute right-5 top-4 text-xl text-slate-500" aria-label="Close login">×</button>
       </div>
+    </div>
+  );
+}
+
+export function PasswordRecoveryModal({ onClose, initialError = '' }: { onClose: () => void; initialError?: string }) {
+  const [password, setPassword] = useState('');
+  const [confirmation, setConfirmation] = useState('');
+  const [error, setError] = useState(initialError);
+  const [message, setMessage] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+
+  const updatePassword = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setError('');
+    setMessage('');
+    if (password.length < 8) return setError('Password must be at least 8 characters.');
+    if (password !== confirmation) return setError('Passwords do not match.');
+    setIsSaving(true);
+    const { error: updateError } = await supabase.auth.updateUser({ password });
+    setIsSaving(false);
+    if (updateError) return setError(updateError.message);
+    setMessage('Password updated successfully. You can now sign in.');
+  };
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/80 p-4">
+      <form onSubmit={updatePassword} className="w-full max-w-md space-y-4 rounded-2xl bg-white p-6 shadow-2xl">
+        <h2 className="text-xl font-black text-slate-900">Set a new password</h2>
+        <p className="text-sm text-slate-600">Your recovery link is active. Choose a new password for your account.</p>
+        {error && <p className="rounded bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+        {message && <p className="rounded bg-emerald-50 p-3 text-sm text-emerald-700">{message}</p>}
+        {!message && <>
+          <input required minLength={8} type="password" placeholder="New password" value={password} onChange={(event) => setPassword(event.target.value)} className="w-full rounded-lg border p-3 text-sm" />
+          <input required minLength={8} type="password" placeholder="Confirm new password" value={confirmation} onChange={(event) => setConfirmation(event.target.value)} className="w-full rounded-lg border p-3 text-sm" />
+          <button disabled={isSaving} className="w-full rounded-lg bg-slate-900 p-3 text-sm font-bold text-white disabled:opacity-60">{isSaving ? 'Updating...' : 'Update password'}</button>
+        </>}
+        {message && <button type="button" onClick={onClose} className="w-full rounded-lg border p-3 text-sm font-bold text-slate-700">Return to sign in</button>}
+      </form>
     </div>
   );
 }

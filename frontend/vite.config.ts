@@ -1,12 +1,10 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
-import {fileURLToPath} from 'url';
-import {defineConfig} from 'vite';
-
-const projectRoot = path.dirname(fileURLToPath(import.meta.url));
+import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
+  const backendOrigin = process.env.VITE_API_BASE_URL || 'http://localhost:3000';
+
   return {
     // The portal is hosted beneath the main site's Student Zone route.
     // Relative asset URLs keep the production build portable at that location.
@@ -14,15 +12,22 @@ export default defineConfig(() => {
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
-        '@': projectRoot,
+        '@': '/src',
       },
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
+      // Do not modify - file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
       // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
+      proxy: {
+        '/api': {
+          target: backendOrigin,
+          changeOrigin: true,
+          secure: false,
+        },
+      },
     },
   };
 });

@@ -218,6 +218,7 @@ export const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = (
 
   const handlePaymentSuccess = async (paymentDetails: any) => {
     setIsPaymentOpen(false);
+    if (!activeForm) return;
 
     try {
       const payload = {
@@ -450,6 +451,20 @@ export const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = (
       </div>
     );
   };
+
+  if (!activeForm) {
+    return (
+      <div className="mx-auto max-w-2xl py-12 px-4 sm:px-6">
+        <div className="rounded-3xl border border-amber-200 bg-amber-50 p-8 text-center shadow-sm">
+          <AlertCircle className="mx-auto mb-4 h-12 w-12 text-amber-600" />
+          <h2 className="text-xl font-black text-slate-900">No registration form available</h2>
+          <p className="mt-2 text-sm text-slate-600">
+            Registration is currently unavailable because no active examination form has been published.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6">

@@ -11,7 +11,9 @@ import {
   CheckCircle2,
   ArrowUpRight,
   ShieldCheck,
-  Calendar
+  Calendar,
+  Bell,
+  FileText
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { AnalyticsSummary, Student, FormConfig } from '../../types';
@@ -209,6 +211,34 @@ export const AdminDashboardOverview: React.FC<AdminDashboardOverviewProps> = ({
         </div>
 
       </div>
+
+      {/* Notice & Circulars Card - Professional Admin Portal Notice Management */}
+      <button
+        id="notice-circulars-card"
+        onClick={() => onNavigateTab('admin-notices')}
+        className="w-full bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 rounded-2xl border border-slate-800 shadow-xl overflow-hidden relative group hover:shadow-amber-500/10 transition-all duration-300 text-left cursor-pointer"
+      >
+        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="relative z-10 p-6 sm:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
+          <div className="flex-1 min-w-0">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-bold uppercase tracking-wider mb-3 border border-amber-500/30">
+              <Bell className="w-3.5 h-3.5 animate-pulse" /> Admin Notice Board
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white mb-2 leading-tight">
+              Notice & Circulars
+            </h3>
+            <p className="text-slate-400 text-xs sm:text-sm max-w-xl leading-relaxed">
+              Create, manage, publish and update notices & circulars. Issue official circulars, exam schedules, admit card releases, scholarship announcements, and result declarations.
+            </p>
+          </div>
+          <div className="flex items-center gap-3 shrink-0">
+            <span className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-5 py-3 rounded-xl text-sm shadow-lg shadow-amber-500/20 group-hover:shadow-amber-500/30 transition-all">
+              <FileText className="w-5 h-5" />
+              <span>Open Notice Manager</span>
+            </span>
+          </div>
+        </div>
+      </button>
 
       {/* Two Column Layout: District Analytics + Recent Registrations */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

@@ -21,6 +21,7 @@ import {
   Users
 } from 'lucide-react';
 import { api } from '../services/api';
+import { supabase } from '../services/supabase';
 import { AdminUser, AdminRole, StudentUser, Student } from '../types';
 import { StaffAdminLogin } from './StaffAdminLogin';
 
@@ -81,7 +82,7 @@ export const UniversalAuthModal: React.FC<UniversalAuthModalProps> = ({
   }, [isOpen, initialTab]);
 
   if (!isOpen) return null;
-  if (initialTab === 'staff') return <StaffAdminLogin onClose={onClose} onAdminLoginSuccess={onAdminLoginSuccess} />;
+  if (initialTab === 'staff') return <StaffAdminLogin onClose={onClose} onAdminLoginSuccess={onClose} />;
 
   // Demo autofill for Student
   const handleFillStudentDemo = (demoReg: string, demoDob: string, demoMobile: string) => {
@@ -127,6 +128,21 @@ export const UniversalAuthModal: React.FC<UniversalAuthModalProps> = ({
       setErrorMessage('Central auth server se connect nahi ho saka.');
       generateCaptcha();
     }
+  };
+
+  const handleAdminPasswordReset = async () => {
+    setErrorMessage('');
+    setSuccessMessage('');
+    const email = username.trim();
+    if (!email || !email.includes('@')) {
+      setErrorMessage('Enter your administrator email first.');
+      return;
+    }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/`,
+    });
+    if (error) setErrorMessage(error.message);
+    else setSuccessMessage('Password reset email sent. Open the new link to set a password.');
   };
 
   const handleStudentSubmit = async (e: React.FormEvent) => {
@@ -454,6 +470,12 @@ export const UniversalAuthModal: React.FC<UniversalAuthModalProps> = ({
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
+              </div>
+
+              <div className="text-right">
+                <button type="button" onClick={handleAdminPasswordReset} className="text-xs font-semibold text-blue-700 hover:underline">
+                  Forgot password?
+                </button>
               </div>
 
               {/* Math Security Captcha */}

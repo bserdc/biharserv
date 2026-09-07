@@ -397,7 +397,7 @@ export const GrievanceHelpdesk: React.FC<GrievanceHelpdeskProps> = ({
                     <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded">
                       {t.ticket_id}
                     </span>
-                    <h4 className="font-extrabold text-sm text-slate-900 mt-1">{t.student_name}</h4>
+                    <h4 className="font-extrabold text-sm text-slate-900 mt-1">{t.student_name || 'Your grievance'}</h4>
                     <p className="text-xs text-slate-500 font-mono">Reg: {t.registration_id}</p>
                   </div>
 
@@ -421,7 +421,7 @@ export const GrievanceHelpdesk: React.FC<GrievanceHelpdeskProps> = ({
                   <p className="text-slate-600 font-medium">{t.requested_changes}</p>
                 </div>
 
-                {t.admin_remarks && (
+                {adminUser && t.admin_remarks && (
                   <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-200 text-xs">
                     <span className="font-bold text-emerald-900">Council Officer Remarks: </span>
                     <span className="text-emerald-800">{t.admin_remarks}</span>

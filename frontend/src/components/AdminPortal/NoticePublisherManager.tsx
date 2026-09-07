@@ -21,7 +21,8 @@ import {
   RotateCcw,
   Copy,
   Clock,
-  Layers
+  Layers,
+  Pencil
 } from 'lucide-react';
 import { NoticeCircular, AdminUser } from '../../types';
 import { api } from '../../services/api';
@@ -42,6 +43,7 @@ export const NoticePublisherManager: React.FC<NoticePublisherManagerProps> = ({
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [isComposing, setIsComposing] = useState(false);
   const [selectedNoticeForPreview, setSelectedNoticeForPreview] = useState<NoticeCircular | null>(null);
+  const [editingNoticeId, setEditingNoticeId] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   // New Notice Form State
@@ -167,13 +169,16 @@ export const NoticePublisherManager: React.FC<NoticePublisherManagerProps> = ({
         publish_date: formData.publish_date || new Date().toISOString().slice(0, 10),
       };
 
-      const res = await api.createNotice(payload);
+      const res = editingNoticeId
+        ? await api.updateNotice(editingNoticeId, payload)
+        : await api.createNotice(payload);
       if (res.success) {
         setStatusMessage({
           type: 'success',
           text: `बधाई! अधिसूचना क्रमांक '${payload.notice_no}' सफलतापूर्वक पोर्टल पर प्रकाशित (Publish) हो गई है। यह तुरंत सार्वजनिक नोटिस बोर्ड पर लाइव दिख रही है।`
         });
         setIsComposing(false);
+        setEditingNoticeId(null);
         // Reset form
         setFormData({
           notice_no: `BSEDRC/NOTICE/${new Date().getFullYear()}/${Math.floor(100 + Math.random() * 900)}`,
@@ -199,6 +204,13 @@ export const NoticePublisherManager: React.FC<NoticePublisherManagerProps> = ({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleEditNotice = (notice: NoticeCircular) => {
+    setEditingNoticeId(notice.id);
+    setFormData({ ...notice });
+    setIsComposing(true);
+    setPreviewTab('form');
   };
 
   const handleDeleteNotice = async (id: string, noticeNo: string) => {
@@ -880,6 +892,15 @@ export const NoticePublisherManager: React.FC<NoticePublisherManagerProps> = ({
 
                     <td className="py-3.5 px-3.5 align-top text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => handleEditNotice(notice)}
+                          className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Edit Notice"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+
                         <button
                           type="button"
                           onClick={() => setSelectedNoticeForPreview(notice)}

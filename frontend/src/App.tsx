@@ -11,10 +11,13 @@ import { InstitutionalSearch } from './components/AdminPortal/InstitutionalSearc
 import { BackendCodeHub } from './components/AdminPortal/BackendCodeHub';
 import { AccountManagement } from './components/AdminPortal/AccountManagement';
 import { NoticeCircularsHub } from './components/NoticeCircularsHub';
+import { NoticePublisherManager } from './components/AdminPortal/NoticePublisherManager';
 import { MeritGazetteDesk } from './components/MeritGazetteDesk';
 import { DocumentVerificationDesk } from './components/DocumentVerificationDesk';
 import { GrievanceHelpdesk } from './components/GrievanceHelpdesk';
 import { UniversalAuthModal } from './components/UniversalAuthModal';
+import { PasswordRecoveryModal } from './components/StaffAdminLogin';
+import { OfflineModeNotice } from './components/OfflineModeNotice';
 import { api } from './services/api';
 import { supabase } from './services/supabase';
 import { FormConfig, Student, School, AnalyticsSummary, AdminUser, StudentUser } from './types';
@@ -26,7 +29,9 @@ export default function App() {
   const isEmbeddedNoticeView = window.location.search.includes('embed=1');
   // Open the Student Zone dashboard first; registration is available from its
   // dashboard actions and should not be the default landing view.
-  const [activeTab, setActiveTab] = useState<string>(isEmbeddedNoticeView || requestedTab === 'notices' ? 'notices' : 'student-zone');
+  const supportedInitialTabs = new Set(['student-zone', 'student-register', 'student-track', 'notices', 'merit-gazette', 'verify-doc', 'helpdesk', 'admin-institutional', 'admin-backend', 'admin-accounts', 'admin-dashboard', 'admin-forms', 'admin-students', 'admin-schools', 'admin-notices']);
+  const initialTab = requestedTab && supportedInitialTabs.has(requestedTab) ? requestedTab : 'student-zone';
+  const [activeTab, setActiveTab] = useState<string>(isEmbeddedNoticeView ? 'notices' : initialTab);
   const [forms, setForms] = useState<FormConfig[]>(INITIAL_FORMS);
   const [students, setStudents] = useState<Student[]>(INITIAL_STUDENTS);
   const [schools, setSchools] = useState<School[]>(INITIAL_SCHOOLS);
@@ -40,6 +45,10 @@ export default function App() {
   const [studentUser, setStudentUser] = useState<StudentUser | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalInitialTab, setAuthModalInitialTab] = useState<'student' | 'admin' | 'staff'>('student');
+  const initialPasswordRecoveryError = new URLSearchParams(window.location.search).get('error_description') || '';
+  const [isPasswordRecoveryOpen, setIsPasswordRecoveryOpen] = useState(Boolean(initialPasswordRecoveryError));
+  const [passwordRecoveryError, setPasswordRecoveryError] = useState(initialPasswordRecoveryError);
+  const [dataMode, setDataMode] = useState<'live' | 'offline' | 'unavailable'>('live');
 
   // Supabase Auth owns the admin session lifecycle.
   useEffect(() => {
@@ -74,12 +83,21 @@ export default function App() {
       setAdminAuthLoading(false);
 
       const verified = await api.adminVerify(session.access_token);
-      if (!disposed && currentRevision === revision && verified.success && verified.admin) {
-        setAdminUser({ ...verified.admin, token: session.access_token });
+      if (!disposed && currentRevision === revision) {
+        if (verified.success && verified.admin) {
+          setAdminUser({ ...verified.admin, token: session.access_token });
+        } else {
+          await supabase.auth.signOut();
+          setAdminUser(null);
+        }
       }
     };
     applyAdminSession().catch(() => { if (!disposed) setAdminAuthLoading(false); });
-    const { data: listener } = supabase.auth.onAuthStateChange(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setPasswordRecoveryError('');
+        setIsPasswordRecoveryOpen(true);
+      }
       // Defer Supabase reads until the auth event has finished propagating.
       window.setTimeout(() => applyAdminSession().catch(() => { if (!disposed) setAdminAuthLoading(false); }), 0);
     });
@@ -103,25 +121,30 @@ export default function App() {
   // Fetch data from backend
   const loadData = async () => {
     try {
-      const [formsRes, studentsRes, schoolsRes, analyticsRes] = await Promise.all([
+      const [formsRes, schoolsRes] = await Promise.all([
         api.getForms(),
-        api.getStudents(),
         api.getSchools(),
-        api.getAnalytics(),
       ]);
 
       if (formsRes.success && formsRes.forms) setForms(formsRes.forms);
-      if (studentsRes.success && studentsRes.students) setStudents(studentsRes.students);
       if (schoolsRes.success && schoolsRes.schools) setSchools(schoolsRes.schools);
-      if (analyticsRes.success && analyticsRes.analytics) setAnalytics(analyticsRes.analytics);
+      if (adminUser) {
+        const [studentsRes, analyticsRes] = await Promise.all([api.getStudents(), api.getAnalytics()]);
+        if (studentsRes.success && studentsRes.students) setStudents(studentsRes.students);
+        if (analyticsRes.success && analyticsRes.analytics) setAnalytics(analyticsRes.analytics);
+      }
     } catch (err) {
       console.warn('Using client-side fallback store while connecting to server...', err);
     }
   };
-
+  useEffect(() => {
+    api.getHealth().then((health) => {
+      setDataMode(health.mode === 'offline' ? 'offline' : health.status === 'ok' ? 'live' : 'unavailable');
+    }).catch(() => setDataMode('unavailable'));
+  }, []);
   useEffect(() => {
     loadData();
-  }, []);
+  }, [adminUser]);
 
   const handleAdminLogout = async () => {
     try {
@@ -228,6 +251,7 @@ export default function App() {
           }
         />
       )}
+      {dataMode !== 'live' && <OfflineModeNotice mode={dataMode} />}
 
       {/* Main Content Area */}
       <main className={isEmbeddedNoticeView ? 'flex-1 w-full p-3 sm:p-6 lg:p-8' : 'flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 pb-24 lg:pb-8'}>
@@ -360,6 +384,7 @@ export default function App() {
                   if (tab === 'forms') setActiveTab('admin-forms');
                   else if (tab === 'schools') setActiveTab('admin-schools');
                   else if (tab === 'students') setActiveTab('admin-students');
+                  else if (tab === 'admin-notices') setActiveTab('admin-notices');
                 }}
               />
             )}
@@ -384,6 +409,10 @@ export default function App() {
             {activeTab === 'admin-schools' && (
               <SchoolMasterManager schools={schools} onRefreshSchools={loadData} />
             )}
+
+            {activeTab === 'admin-notices' && adminUser && (
+              <NoticePublisherManager adminUser={adminUser} onNavigateToPublicNotices={() => setActiveTab('notices')} />
+            )}
           </>
         )}
       </main>
@@ -407,6 +436,16 @@ export default function App() {
           }
         }}
       />
+
+      {isPasswordRecoveryOpen && (
+        <PasswordRecoveryModal
+          initialError={passwordRecoveryError}
+          onClose={() => {
+            setIsPasswordRecoveryOpen(false);
+            supabase.auth.signOut();
+          }}
+        />
+      )}
 
       {/* Official Government / Council Footer */}
       {!isEmbeddedNoticeView && <footer className="bg-white border-t border-slate-200 py-6 px-4 text-center text-xs text-slate-500 mt-auto mb-16 lg:mb-0">
