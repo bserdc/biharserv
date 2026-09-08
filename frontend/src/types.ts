@@ -192,7 +192,7 @@ export interface NoticeCircular {
   notice_no: string;
   title_hi: string;
   title_en: string;
-  category: 'EXAM' | 'ADMIT_CARD' | 'RESULT' | 'SCHOLARSHIP' | 'AFFILIATION' | 'GUIDELINES';
+  category: 'EXAM' | 'ADMIT_CARD' | 'RESULT' | 'SCHOLARSHIP' | 'AFFILIATION' | 'GUIDELINES' | 'VACANCY' | 'OFFICIAL';
   publish_date: string;
   is_urgent?: boolean;
   summary_hi: string;
@@ -250,6 +250,5 @@ export interface VerificationResult {
   council_signature_hash: string;
   remarks: string;
 }
-
 
 

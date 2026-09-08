@@ -257,6 +257,10 @@ export const NoticePublisherManager: React.FC<NoticePublisherManagerProps> = ({
         return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200">छात्रवृत्ति (Scholarship)</span>;
       case 'AFFILIATION':
         return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200">मान्यता (U-DISE)</span>;
+      case 'VACANCY':
+        return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">Vacancy / Recruitment</span>;
+      case 'OFFICIAL':
+        return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-100 text-cyan-800 border border-cyan-200">Official Notice</span>;
       default:
         return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">दिशानिर्देश (Guidelines)</span>;
     }
@@ -478,6 +482,8 @@ export const NoticePublisherManager: React.FC<NoticePublisherManagerProps> = ({
                     <option value="SCHOLARSHIP">छात्रवृत्ति एवं अनुदान (Scholarship)</option>
                     <option value="AFFILIATION">मान्यता व U-DISE (School Affiliation)</option>
                     <option value="GUIDELINES">दिशानिर्देश व सुधार (Rules & Grievance)</option>
+                    <option value="VACANCY">Vacancy / Recruitment</option>
+                    <option value="OFFICIAL">Official Notice</option>
                   </select>
                 </div>
 
@@ -824,6 +830,8 @@ export const NoticePublisherManager: React.FC<NoticePublisherManagerProps> = ({
               <option value="SCHOLARSHIP">छात्रवृत्ति (Scholarship)</option>
               <option value="AFFILIATION">मान्यता (U-DISE)</option>
               <option value="GUIDELINES">दिशानिर्देश (Guidelines)</option>
+              <option value="VACANCY">Vacancy / Recruitment</option>
+              <option value="OFFICIAL">Official Notice</option>
             </select>
           </div>
         </div>

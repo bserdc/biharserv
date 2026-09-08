@@ -77,6 +77,8 @@ export const NoticeCircularsHub: React.FC<NoticeCircularsHubProps> = ({
     { key: 'SCHOLARSHIP', label_hi: 'छात्रवृत्ति एवं मेधा', label_en: 'Scholarship Grants', icon: Award },
     { key: 'AFFILIATION', label_hi: 'U-DISE एवं मान्यता', label_en: 'School Affiliation', icon: Building2 },
     { key: 'GUIDELINES', label_hi: 'दिशानिर्देश व सुधार', label_en: 'Rules & Grievance', icon: BookOpen },
+    { key: 'VACANCY', label_hi: 'Vacancy & Recruitment', label_en: 'Vacancy & Recruitment', icon: FileText },
+    { key: 'OFFICIAL', label_hi: 'Official Notice', label_en: 'Official Notices', icon: FileText },
   ];
 
   return (
