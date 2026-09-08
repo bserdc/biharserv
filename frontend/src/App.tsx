@@ -448,41 +448,57 @@ export default function App() {
       )}
 
       {/* Official Government / Council Footer */}
-      {!isEmbeddedNoticeView && <footer className="bg-white border-t border-slate-200 py-6 px-4 text-center text-xs text-slate-500 mt-auto mb-16 lg:mb-0">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
-          <div className="text-left">
-            <p className="font-bold text-slate-800">
-              Bihar State Educational Development and Research Council (BSEDRC)
-            </p>
-            <p className="text-[11px] text-slate-500">
-              बिहार राज्य शैक्षिक विकास एवं अनुसंधान परिषद • Central Examination & U-DISE Student Lifecycle Directorate
+      {!isEmbeddedNoticeView && <footer className="bg-[#183536] text-[#cdd7d4] mt-auto pb-20 lg:pb-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Brand */}
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <img src="./assets/logo.png" alt="Council logo" className="h-12 w-12 rounded-full bg-white object-contain p-1" />
+              <div>
+                <p className="font-bold text-white text-sm leading-snug">Bihar State Educational<br />Development &amp; Research Council</p>
+                <p className="text-[10px] uppercase tracking-wider text-[#e6a18b] mt-1">BSEDRC Student Zone</p>
+              </div>
+            </div>
+            <p className="text-xs leading-relaxed text-[#a8bab6]">
+              Building an educated, confident and empowered Bihar — one student at a time.
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] text-slate-500">
-            <span className="inline-flex items-center px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700">
-              Dynamic Google Form Engine Active
-            </span>
-            <span>•</span>
-            <span className="inline-flex items-center px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold">
-              Universal Auth: Student + Admin
-            </span>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="font-bold text-white text-xs uppercase tracking-widest mb-4">Quick Links</h3>
+            <div className="flex flex-col gap-2 text-sm">
+              <button onClick={() => setActiveTab('student-zone')} className="text-left hover:text-white transition-colors w-fit">Dashboard</button>
+              <button onClick={() => setActiveTab('student-register')} className="text-left hover:text-white transition-colors w-fit">New Registration</button>
+              <button onClick={() => setActiveTab('student-track')} className="text-left hover:text-white transition-colors w-fit">Track Application</button>
+              <button onClick={() => setActiveTab('notices')} className="text-left hover:text-white transition-colors w-fit">Notices &amp; Circulars</button>
+              <button onClick={() => setActiveTab('merit-gazette')} className="text-left hover:text-white transition-colors w-fit">Merit Gazette</button>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              id="footer-admin-portal-btn"
-              onClick={() => adminUser ? setActiveTab('admin-dashboard') : handleOpenAuthModal('admin')}
-              className="inline-flex items-center gap-2 rounded-lg bg-slate-950 px-3 py-2 text-[11px] font-bold text-amber-300 transition hover:bg-slate-800"
-            >
-              <ShieldCheck className="h-3.5 w-3.5" />
-              Admin Portal
-            </button>
-            <button
-              id="footer-code-hub-btn"
-              onClick={() => setActiveTab('admin-backend')}
-              className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-[11px] font-bold text-emerald-700 transition hover:bg-emerald-100"
-            >
-              Code Hub
-            </button>
+
+          {/* Contact + Portal buttons */}
+          <div>
+            <h3 className="font-bold text-white text-xs uppercase tracking-widest mb-4">Contact</h3>
+            <p className="text-xs leading-relaxed mb-3">
+              Neha Bhawan, Near BNMV College,<br />Sahugarh, Madhepura, Bihar 852113
+            </p>
+            <a href="tel:+917070530080" className="block text-sm hover:text-white transition-colors w-fit">+91 7070530080</a>
+            <a href="mailto:adarshbiharsiksha@gmail.com" className="block text-sm hover:text-white transition-colors w-fit break-all">adarshbiharsiksha@gmail.com</a>
+            <div className="flex flex-wrap items-center gap-2 mt-4">
+              <button
+                id="footer-admin-portal-btn"
+                onClick={() => adminUser ? setActiveTab('admin-dashboard') : handleOpenAuthModal('admin')}
+                className="inline-flex items-center gap-2 rounded-lg bg-slate-950 px-3 py-2 text-[11px] font-bold text-amber-300 transition hover:bg-slate-800"
+              >
+                <ShieldCheck className="h-3.5 w-3.5" />
+                Admin Portal
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-white/10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 text-center text-[11px] text-[#94aaa6]">
+            © {new Date().getFullYear()} Bihar State Educational Development &amp; Research Council. All rights reserved.
           </div>
         </div>
       </footer>}

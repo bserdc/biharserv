@@ -1,9 +1,11 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
   const backendOrigin = process.env.VITE_API_BASE_URL || 'http://localhost:3000';
+  const srcPath = fileURLToPath(new URL('./src', import.meta.url));
 
   return {
     // The portal is hosted beneath the main site's Student Zone route.
@@ -12,7 +14,7 @@ export default defineConfig(() => {
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
-        '@': '/src',
+        '@': srcPath,
       },
     },
     server: {

@@ -5,5 +5,4 @@ export {
   INITIAL_NOTICES,
   INITIAL_TOPPERS,
   INITIAL_GRIEVANCES,
-} from '../../../data/portalData';
-
+} from './portalData';

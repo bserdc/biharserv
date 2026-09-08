@@ -1784,3 +1784,149 @@ button.button {
     padding: 24px 18px;
   }
 }
+
+/* ===== Mobile polish layer ===== */
+
+/* iOS: inputs 16px se chhote hone par page auto-zoom hota hai */
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+@media (max-width: 850px) {
+  /* Kisi bhi element se horizontal scroll na aaye */
+  body,
+  main {
+    overflow-x: clip;
+  }
+
+  .section-shell,
+  .header-wrap,
+  .main-nav {
+    width: min(100% - 28px, var(--max));
+  }
+
+  /* Tap targets ko bada karo */
+  .main-nav a {
+    padding: 14px 0;
+    min-height: 44px;
+  }
+
+  .social-link,
+  .menu-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Header spacing */
+  .header-wrap {
+    gap: 12px;
+  }
+
+  /* Hero media fixed height, image properly cover kare */
+  .hero-media {
+    min-height: 0;
+    height: 300px;
+  }
+
+  .hero-media > img {
+    height: 100%;
+  }
+
+  .hero-stamp {
+    width: 104px;
+    height: 104px;
+    right: 14px;
+    bottom: 14px;
+    padding: 8px;
+  }
+
+  .hero-stamp b {
+    font-size: 1rem;
+  }
+
+  .hero-stamp span {
+    font-size: 0.6rem;
+  }
+
+  /* Page hero (About/Contact/Awards) spacing mobile pe kam */
+  .page-hero {
+    padding: 56px 0 52px;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2rem, 9vw, 3rem);
+  }
+
+  .page-hero > div > p:last-child {
+    font-size: 1rem;
+  }
+
+  /* Gallery toolbar stack ho jaye */
+  .gallery-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .gallery-page {
+    padding: 54px 0 70px;
+  }
+
+  /* Tables agar kahin hon to overflow scroll */
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Footer links tap-friendly */
+  .site-footer a {
+    padding: 6px 0;
+    display: inline-block;
+  }
+
+  .site-footer {
+    padding-top: 48px;
+  }
+
+  .join-section {
+    padding: 60px 0;
+  }
+
+  .report-bar a {
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .work-card > div {
+    padding: 18px 16px 20px;
+  }
+
+  .stat-card {
+    padding: 16px 14px;
+  }
+
+  .stat-card strong {
+    font-size: 1.6rem;
+  }
+
+  .gallery-grid {
+    gap: 10px;
+  }
+
+  .site-footer h3 {
+    margin-top: 6px;
+  }
+
+  .hero-actions .text-link {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .button {
+    padding: 13px 18px;
+  }
+}
